@@ -4,41 +4,46 @@ const finalValue = document.getElementById("final-value");
 
 // Object that stores values of minimum and maximum angle for each label
 const rotationValues = [
-  { minDegree: 0, maxDegree: 30, value: 'A4 ስዕል አድህኖ' },    // Excluded
-  { minDegree: 31, maxDegree: 90, value: 'መስቀል' },    // meskel
-  { minDegree: 91, maxDegree: 150, value: 'እንኳን አደረሳችሁ' },   // enkuan_aderesachu
-  { minDegree: 151, maxDegree: 210, value: 'ትንሹ ስዕል አድህኖ' },  // teneshu_sel_adehno
-  { minDegree: 211, maxDegree: 270, value: 'ክር' },  // ker
-  { minDegree: 271, maxDegree: 330, value: 'ፍሬም ስዕል አድህኖ' },  // Excluded
-  { minDegree: 331, maxDegree: 360, value: 'A4 ስዕል አድህኖ' },  // Excluded
+  { minDegree: 0, maxDegree: 45, value: 'A 4 ቅዱስት ስዕላት' },    // Excluded
+  { minDegree: 46, maxDegree: 90, value: 'መስቀል የእንጨት' },
+  { minDegree: 91, maxDegree: 135, value: 'እንኳን አደረሳችሁ' },
+  { minDegree: 136, maxDegree: 180, value: 'ትንሹ ስዕል አድህኖ' },
+  { minDegree: 181, maxDegree: 225, value: 'ፍሬም ስዕል አድህኖ' },    // Excluded
+  { minDegree: 226, maxDegree: 270, value: 'ክር' },
+  { minDegree: 271, maxDegree: 315, value: 'መስቀል የብረት' },
+  { minDegree: 316, maxDegree: 360, value: 'ላምኔት የተደረገ ቅዱስት ስዕላት' },
 ];
 
 // Draw limits for each label
 const drawLimit = {
-  'መስቀል': 30, // meskel: 30 times
-  'ክር': 30, // ker: 30 times
-  'ትንሹ ስዕል አድህኖ': 20, // teneshu_sel_adehno: 20 times
-  'እንኳን አደረሳችሁ': 50, // enkuan_aderesachu: 50 times
-  'A4 ስዕል አድህኖ': 5, // A4: 50 times
-  'ፍሬም ስዕል አድህኖ': 3, // yefrem_sel_adehno: 30 times
+  'A 4 ቅዱስት ስዕላት': 0, // Excluded
+  'መስቀል የእንጨት': 40, // 40 times
+  'እንኳን አደረሳችሁ': 350, // double number of the rewards times the reward is 160 so this will be 320
+  'ትንሹ ስዕል አድህኖ': 20, // 20 times
+  'ፍሬም ስዕል አድህኖ': 0, // Excluded
+  'ክር': 50, // 50 times
+  'መስቀል የብረት': 20, // 20 times
+  'ላምኔት የተደረገ ቅዱስት ስዕላት': 30, // 30 times
 };
 
 // Count the number of draws for each label
 const drawCount = {
-  'መስቀል': 0,
-  'ክር': 0,
-  'ትንሹ ስዕል አድህኖ': 0,
+  'A 4 ቅዱስት ስዕላት': 0,
+  'መስቀል የእንጨት': 0,
   'እንኳን አደረሳችሁ': 0,
-  'A4 ስዕል አድህኖ': 0,
+  'ትንሹ ስዕል አድህኖ': 0,
   'ፍሬም ስዕል አድህኖ': 0,
+  'ክር': 0,
+  'መስቀል የብረት': 0,
+  'ላምኔት የተደረገ ቅዱስት ስዕላት': 0,
 };
 
 // Size of each piece
-const data = [16, 16, 16, 16, 16, 16];
+const data = [30, 30, 30, 30, 30, 30, 30, 30];
 
 // Background color for each piece
 var pieColors = [
-  "#388E3C", "#005B96", "#388E3C", "#005B96", "#388E3C", "#005B96"
+  "#388E3C", "#005B96", "#388E3C", "#005B96", "#388E3C", "#005B96", "#388E3C", "#005B96",
 ];
 
 // Create chart
@@ -46,7 +51,7 @@ let myChart = new Chart(wheel, {
   plugins: [ChartDataLabels],
   type: "pie",
   data: {
-    labels: ['መስቀል', 'A4 ስዕል አድህኖ', 'ፍሬም ስዕል አድህኖ', 'ክር', 'ትንሹ ስዕል አድህኖ', 'እንኳን አደረሳችሁ'],
+    labels: ['መስቀል የእንጨት', 'A4 ቅዱሳን ስዕላት', 'ላምኔት የተደረገ ቅቅዱሳን ስዕላት' , 'መስቀል የብረት' , 'ክር' , 'ፍሬም ቅዱሳን ስዕላት' , 'ትንሹ ቅዱሳን ስዕላት' , 'እንኳን አደረሳችሁ'],
     datasets: [
       {
         backgroundColor: pieColors,
@@ -63,7 +68,7 @@ let myChart = new Chart(wheel, {
       datalabels: {
         color: "#FFDF00",
         formatter: (_, context) => context.chart.data.labels[context.dataIndex],
-        font: { size: 16 },
+        font: { size: 14.5 },
       },
     },
   },
@@ -77,8 +82,8 @@ const checkGameOver = () => {
 // Function to display value based on randomAngle
 const valueGenerator = (angleValue) => {
   for (let i of rotationValues) {
-    // Skip labels A4, yefrem_sel_adehno, or any label that has reached its draw limit
-    if (i.value === 'A4 ስዕል አድህኖ' || i.value === 'ፍሬም ስዕል አድህኖ' || drawCount[i.value] >= drawLimit[i.value]) {
+    // Skip labels A 4 ቅዱስት ስዕላት, ፍሬም ስዕል አድህኖ, or any label that has reached its draw limit
+    if (i.value === 'A 4 ቅዱስት ስዕላት' || i.value === 'ፍሬም ስዕል አድህኖ' || drawCount[i.value] >= drawLimit[i.value]) {
       continue; // Skip this value
     }
 
@@ -111,35 +116,37 @@ spinBtn.addEventListener("click", () => {
   spinBtn.disabled = true;
   finalValue.innerHTML = `<p><strong>መልካም እድል!</p>`;
 
-  // Generate random degrees but exclude ranges for A4, yefrem_sel_adehno, and labels that have reached their limits
+  // Generate random degrees but exclude ranges for excluded labels and those that have reached their limits
   let randomDegree;
   do {
     randomDegree = Math.floor(Math.random() * (355 - 0 + 1) + 0);
   } while (
-    (randomDegree >= 0 && randomDegree <= 30) ||   // Exclude range for A4
-    (randomDegree >= 331 && randomDegree <= 360) ||// Exclude range for A4
-    (randomDegree >= 271 && randomDegree <= 330) ||// Exclude range for yefrem_sel_adehno
-    (randomDegree >= 31 && randomDegree <= 90 && drawCount['መስቀል'] >= drawLimit['መስቀል']) ||   // Exclude range for meskel if drawn 30 times
-    (randomDegree >= 151 && randomDegree <= 210 && drawCount['ትንሹ ስዕል አድህኖ'] >= drawLimit['ትንሹ ስዕል አድህኖ']) || // Exclude range for teneshu_sel_adehno if drawn 20 times
-    (randomDegree >= 211 && randomDegree <= 270 && drawCount['ክር'] >= drawLimit['ክር']) || // Exclude range for ker if drawn 30 times
-    (randomDegree >= 91 && randomDegree <= 150 && drawCount['እንኳን አደረሳችሁ'] >= drawLimit['እንኳን አደረሳችሁ'])     // Exclude range for enkuan_aderesachu if drawn 50 times
+    (randomDegree >= 0 && randomDegree <= 45) ||   // Exclude range for A 4 ቅዱስት ስዕላት
+    (randomDegree >= 181 && randomDegree <= 225) || // Exclude range for ፍሬም ስዕል አድህኖ
+    (randomDegree >= 46 && randomDegree <= 90 && drawCount['መስቀል የእንጨት'] >= drawLimit['መስቀል የእንጨት']) ||
+    (randomDegree >= 91 && randomDegree <= 135 && drawCount['እንኳን አደረሳችሁ'] >= drawLimit['እንኳን አደረሳችሁ']) ||
+    (randomDegree >= 136 && randomDegree <= 180 && drawCount['ትንሹ ስዕል አድህኖ'] >= drawLimit['ትንሹ ስዕል አድህኖ']) ||
+    (randomDegree >= 226 && randomDegree <= 270 && drawCount['ክር'] >= drawLimit['ክር']) ||
+    (randomDegree >= 271 && randomDegree <= 315 && drawCount['መስቀል የብረት'] >= drawLimit['መስቀል የብረት']) ||
+    (randomDegree >= 316 && randomDegree <= 360 && drawCount['ላምኔት የተደረገ ቅዱስት ስዕላት'] >= drawLimit['ላምኔት የተደረገ ቅዱስት ስዕላት'])
   );
 
-  // Interval for rotation animation
-  let rotationInterval = window.setInterval(() => {
-    myChart.options.rotation = myChart.options.rotation + resultValue;
-    myChart.update();
+ // Interval for rotation animation
+ let rotationInterval = window.setInterval(() => {
+  myChart.options.rotation = myChart.options.rotation + resultValue;
+  myChart.update();
 
-    // If rotation > 360 reset it back to 0
-    if (myChart.options.rotation >= 360) {
-      count += 1;
-      resultValue -= 5;
-      myChart.options.rotation = 0;
-    } else if (count > 15 && myChart.options.rotation == randomDegree) {
-      valueGenerator(randomDegree);
-      clearInterval(rotationInterval);
-      count = 0;
-      resultValue = 101;
-    }
-  }, 10);
+  // If rotation > 360 reset it back to 0
+  if (myChart.options.rotation >= 360) {
+    count += 1;
+    resultValue -= 5;
+    myChart.options.rotation = 0;
+  } else if (count > 15 && myChart.options.rotation == randomDegree) {
+    valueGenerator(randomDegree);
+    clearInterval(rotationInterval);
+    count = 0;
+    resultValue = 101;
+  }
+}, 10);
 });
+
